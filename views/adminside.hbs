@@ -1,0 +1,217 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+        integrity="sha512-SfTiTlX6kk+qitfevl/7LibUOeJWlt9rbyDn92a1DqWOw9vWG2MFoays0sgObmWazO5BQPiFucnnEAjpAB+/Sw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <title>Admin Screen</title>
+</head>
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Poppins', sans-serif;
+    }
+
+
+
+    .card {
+        padding: 1rem;
+        border: none;
+    }
+
+    .form-control {
+        width: 50%;
+    }
+</style>
+
+<body>
+
+
+    {{!-- tabs --}}
+    <div class="container-fluid" style="margin-top: 5%">
+
+        <div class="row">
+            <div class="col-lg-3 col-md-12 col-12 rowcol1">
+                <div class="nav flex-column nav-pills text-uppercase" id="v-pills-tab" role="tablist"
+                    aria-orientation="vertical">
+                    <a class="nav-link active" id="v-pills-leavereqs-tab" data-toggle="pill" href="#v-pills-leavereqs"
+                        role="tab" aria-controls="v-pills-homeleavereqs" aria-selected="true"> Leave Requests</a>
+                    <a class="nav-link" id="v-pills-profile-tab" data-toggle="pill" href="#v-pills-profile" role="tab"
+                        aria-controls="v-pills-profile" aria-selected="false">Employee History</a>
+                    <a class="nav-link" id="v-pills-messages-tab" data-toggle="pill" href="#v-pills-addemps" role="tab"
+                        aria-controls="v-pills-messages" aria-selected="false">Add New Employee</a>
+                    <a class="nav-link" id="v-pills-settings-tab" data-toggle="pill" href="#v-pills-delemps" role="tab"
+                        aria-controls="v-pills-settings" aria-selected="false">Employee List</a>
+                    <a class="nav-link" id="v-pills-settings-tab" data-toggle="pill" href="#v-pills-cancle" role="tab"
+                        aria-controls="v-pills-settings" aria-selected="false">Sign Out</a>
+                </div>
+            </div>
+            <div class="col-lg-9 col-md-12 col-12">
+                <div class="tab-content" id="v-pills-tabContent">
+                    <div class="tab-pane fade" id="v-pills-addemps" role="tabpanel"
+                        aria-labelledby="v-pills-addemps-tab">
+                        <div class="card">
+                            Add Employee
+                        </div>
+                        <div class="container">
+                            <form action="/addemp" method="GET">
+                                <div class="form-group">
+                                    <label for="name">Enter the name of Employee</label>
+                                    <input type="text" class="form-control" name="name" id="name"
+                                        placeholder="Enter the name" required>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="empid">Employee ID</label>
+                                    <input type="number" class="form-control" name="empid" id="empid"
+                                        placeholder="Enter the ID" required>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="pass">Set Initial Password</label>
+                                    <input type="password" class="form-control" name="pass" id="pass"
+                                        placeholder="Enter the Password" required>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="DOJ">Date of Joining</label>
+                                    <input type="date" class="form-control" name="DOJ" id="DOJ" placeholder="Enter DOJ"
+                                        required>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="DOB">Date of Birth</label>
+                                    <input type="date" class="form-control" name="DOB" id="DOB" placeholder="Enter DOB"
+                                        required>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="email">Email ID</label>
+                                    <input type="email" class="form-control" name="email" id="email"
+                                        placeholder="Enter mail ID" required>
+                                </div>
+
+                                <button type="submit" class="btn btn-primary">Submit</button>
+                            </form>
+                        </div>
+
+                        {{#if checkmesg}}
+                        <h3>Emp id already assigned</h3>
+                        {{/if}}
+                        {{#if mesg}}
+                        <h3>Data Inserted</h3>
+                        {{/if}}
+                    </div>
+                    <div class="tab-pane fade" id="v-pills-delemps" role="tabpanel"
+                        aria-labelledby="v-pills-delemps-tab">
+                        <div class="card">
+                            Delete the records of the Employee
+                        </div>
+                        <div class="card-body">
+                            <table class="table table-striped table-dark">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">ID</th>
+                                        <th scope="col">EMAIL</th>
+                                        <th scope="col">Delete using ID</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {{#cancleemp}}
+                                    <tr>
+                                        <td>{{empid}}</td>
+                                        <td>{{email}}</td>
+
+                                        <td><a href="delemp/{{this.empid}}"><i class="fa-1x fa fa-trash"
+                                                    aria-hidden="true"></i></a>
+                                        </td>
+                                    </tr>
+                                    {{/cancleemp}}
+
+                                </tbody>
+                            </table>
+
+
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="v-pills-leavereqs" role="tabpanel"
+                        aria-labelledby="v-pills-leavereqs-tab">
+                        <div class="card">
+                            <div class="card-header text-uppercase Cheader">
+                                LEAVE REQUESTS
+                            </div>
+                            <div class="card-body">
+                                <table class="table table-striped table-dark">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">EMPID</th>
+                                            <th scope="col">ON LEAVE FOR</th>
+                                            <th scope="col">START DATE</th>
+                                            <th scope="col">END DATE</th>
+                                            <th scope="col">Delete</th>
+                                            <th scope="col">Accept</th>
+
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {{#leaverequest}}
+                                        <tr>
+                                            <td>{{empid}}</td>
+                                            <td>{{noofdays}}</td>
+                                            <td>{{startdate}}</td>
+                                            <td>{{enddate}}</td>
+                                            <td><a href="delete/{{this.empid}}"><i class="fa-1x fa fa-trash"
+                                                        aria-hidden="true"></i></a>
+                                            </td>
+                                            <td>
+                                                <a href="accept/{{this.empid}}"><i class="fa-1x fa fa-check"
+                                                        aria-hidden="true"></i></a>
+
+                                            </td>
+
+
+                                        </tr>
+                                        {{/leaverequest}}
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+</body>
+
+</html>
