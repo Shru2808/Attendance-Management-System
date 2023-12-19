@@ -1,0 +1,32 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+.header {
+    color: rgb(6, 0, 0);
+    text-align: center;
+    font-size: 50px;
+    font-weight: bold;
+    padding: 10px;
+
+}
+
+.input-field {
+    width: 100%;
+    height: 40px;
+    padding: 10px;
+    text-align: center;
+}
+
+.card {
+    margin-top: 12% !important;
+    margin-left: 20% !important;
+    position: absolute !important;
+    width: 450px !important;
+    background-color: rgba(169, 175, 186, 0.079) !important;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.8), 0 6px 20px 0 rgba(0, 0, 0, 0.8);
+    ;
+}

@@ -1,0 +1,51 @@
+.container-fluid {
+    margin-top: 5%;
+}
+
+.row {
+    margin-bottom: 20px;
+}
+
+/* Style the left column */
+.rowcol1 {
+    background-color: #f8f9fa;
+    /* Light gray background */
+    padding: 15px;
+    border-right: 1px solid #dee2e6;
+    /* Border between columns */
+}
+
+.nav-link {
+    padding: 10px 0;
+    /* Adjust padding for navigation links */
+    color: #007bff;
+    /* Blue color for links */
+}
+
+.nav-link.active {
+    background-color: #007bff;
+    /* Blue background for active link */
+    color: #fff;
+    /* White text for active link */
+}
+
+/* Style the right column */
+.col-right {
+    padding: 15px;
+}
+
+.card {
+    background-color: #f8f9fa;
+    /* Light gray background for cards */
+    padding: 15px;
+    margin-bottom: 20px;
+    border: 1px solid #dee2e6;
+    /* Border around cards */
+    border-radius: 5px;
+    /* Optional: Add rounded corners */
+}
+
+.form-group {
+    margin-bottom: 15px;
+    /* Adjust spacing between form groups */
+}

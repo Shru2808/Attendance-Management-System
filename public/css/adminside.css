@@ -1,0 +1,175 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+.card {
+    padding: 1rem;
+    border: none;
+    font-weight:bold;
+}
+
+.btn {
+    border-color: rgb(41, 41, 141) !important;
+
+}
+.btn-primary{
+    margin-left: 27rem ;
+}
+
+.btn:hover {
+    background-color: rgb(89, 89, 163) !important;
+}
+
+/* Add your global styles here */
+body {
+    background-color: #f8f9fa;
+    /* Background color for the entire body */
+}
+
+.container-fluid {
+    padding-top: 0.2rem;
+}
+
+/* Style for the left sidebar */
+.rowcol1 {
+    background-color: rgb(106, 18, 49);
+    /* Sidebar background color */
+    color: #ffffff;
+    /* Text color for the sidebar */
+    padding: 20px;
+}
+
+/* Style for the pills navigation */
+.nav-pills .nav-link {
+    color: #ffffff;
+    /* Text color for the pills navigation */
+}
+
+.nav-pills .nav-link.active {
+    background-color: #380707;
+    /* Background color for the active pill */
+}
+
+/* Style for the content area */
+.col-lg-9 {
+    background-color: #ffffff;
+    /* Content area background color */
+    padding: 20px;
+}
+
+/* Style for the search form */
+.input-group {
+    margin-bottom: 20px;
+    padding-left: 1rem;
+}
+
+.card-container {
+    display: inline-flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    align-items: flex-start;
+    overflow: hidden;
+}
+/* Style for the card */
+.card {
+    margin-bottom: 20px;
+    padding: 20px;
+}
+
+/* Style for the tables */
+.table {
+    margin-bottom: 20px;
+}
+
+/* Style for the table header */
+.table th {
+    background-color: #343a40;
+    /* Table header background color */
+    color: #ffffff;
+    /* Table header text color */
+}
+
+/* Style for the table rows */
+.table tbody tr {
+    background-color: #0d0101;
+    /* Table row background color */
+}
+
+/* Style for links in the table */
+.table a {
+    color: #007bff;
+    /* Link color */
+}
+
+/* Style for buttons */
+.btn-primary {
+    background-color: #007bff;
+    /* Primary button background color */
+    color: #ffffff;
+    /* Primary button text color */
+}
+
+.btn-outline-success {
+    border-color: #28a745;
+    /* Success button border color */
+    color: #28a745;
+    /* Success button text color */
+}
+
+/* Style for font awesome icons */
+#current-date {
+    width: 200px;
+    padding: 8px;
+    font-size: 16px;
+}
+
+#employee-table {
+    margin-top: 20px;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+#employee-table th,
+#employee-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+#employee-table th {
+    background-color: #4CAF50;
+    color: white;
+}
+
+#employee-table tbody tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+#employee-table tbody tr:hover {
+    background-color: #ddd;
+}
+.submit-button {
+    background-color: #4CAF50;
+    /* Green background color */
+    color: white;
+    /* White text color */
+    padding: 10px 15px;
+    /* Padding for better appearance */
+    border: none;
+    /* Remove border */
+    border-radius: 4px;
+    /* Add border-radius for rounded corners */
+    cursor: pointer;
+    /* Add a pointer cursor on hover */
+    font-size: 16px;
+    /* Set font size */
+}
+
+/* Style the button on hover for better user feedback */
+.submit-button:hover {
+    background-color: #45a049;
+    /* Darker green on hover */
+}
