@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 var mysql = require("mysql");
 // require('./views/Registration');
 // require('./views/login');
@@ -18,7 +17,7 @@ con.connect((err) => {
   }
 });
 module.exports.con = con;
-=======
+
 var mysql = require("mysql");
 // require('./views/Registration');
 // require('./views/login');
@@ -38,4 +37,3 @@ con.connect((err) => {
   }
 });
 module.exports.con = con;
->>>>>>> origin/main
