@@ -1,4 +1,3 @@
-
 const express = require("express");
 const excel = require("exceljs");
 const path = require("path");
@@ -10,7 +9,6 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.json());
 app.use("/public", express.static(path.join(__dirname, "public")));
 app.use(express.static(path.join(__dirname, "public")));
-// app.use(cors);
 
 app.set("view engine", "hbs");
 app.set("views", path.join(__dirname, "/views"));
@@ -22,8 +20,8 @@ app.get("/", (req, res) => {
 app.get("/Adminlogin", (req, res) => {
   res.render("Adminlogin");
 });
-app.get("/adminregistration", (req, res) => {
-  res.render("adminregistration");
+app.get("/Adminregistration", (req, res) => {
+  res.render("Adminregistration");
 });
 
 // app.get("/Emplogin", (req, res) => {
@@ -192,100 +190,6 @@ app.get("/delemp/:empid", async (req, res) => {
     console.log(err);
   }
 });
-
-//Rejecting the leave of employee
-// app.get("/delete/:empid", async (req, res) => {
-//   try {
-//     const empid = req.params.empid;
-//     let qry = "delete from leaveappl where empid=?";
-//     conn.query(qry, [empid], (err, results) => {
-//       if (!err) {
-//         res.send("deleted");
-//       } else {
-//         console.log(err);
-//       }
-//     });
-//   } catch (err) {
-//     console.log(err);
-//   }
-// });
-
-//Accepting the leaves of the employees and then inserting them in new table and deleting them from previous table
-// app.get("/accept/:empid", (req, res) => {
-//   const empid = req.params.empid;
-//   const { leavetype, noofdays, startdate, enddate } = req.body;
-//   let qry1 =
-//     "INSERT INTO acceptedleaves (empid, leavetype, noofdays, startdate, enddate) SELECT la.empid, la.leavetype, la.noofdays, la.startdate, la.enddate FROM leaveappl AS la";
-//   conn.query(
-//     qry1,
-//     [empid, leavetype, noofdays, startdate, enddate],
-//     (err, result) => {
-//       if (err) {
-//         console.error(err);
-//         res.status(500).send("Error accepting leave");
-//       } else {
-//         const qry2 = "delete from leaveappl where empid=?";
-//         conn.query(qry2, [empid], (delerr, results) => {
-//           if (delerr) {
-//             console.error(err);
-//             res.status(500).send("Error accepting leave");
-//           } else {
-//             res.render("adminside");
-//           }
-//         });
-//       }
-//     }
-//   );
-// });
-// Adminside seeing the leaves calculated
-// app.get("/calculateleaves", (req, res) => {
-//   const empid = req.query.empid;
-//   const sql =
-//     "select empid, remaining_sick_leaves, remaining_paid_leaves from paidleavestatus where empid=?";
-//   conn.query(sql, [empid], (err, results) => {
-//     if (!err) {
-//       if (results.length == 0) {
-//         res.send("Employee not present in the paidleavestatus table");
-//       } else {
-//         res.render("search_results", { leaves: results });
-//       }
-//     } else {
-//       res.send("Error quering database");
-//       console.log(err);
-//     }
-//   });
-// });
-
-//Rendering the present monthly days.
-// app.get("/monthlyreport", (req, res) => {
-//   const empid = req.body;
-//   const Name = req.body;
-
-//   const qry =
-//     "select * from monitorattendance where empid=? and year=? and month=?";
-//   conn.query(qry, [empid, year, month], (err, results) => {
-//     if (!err) {
-//       if (results.length == 0) {
-//         res.render("Empdashboard");
-//       } else {
-//         res.render("empmonitoratt", { monitoratt: results });
-//       }
-//     } else {
-//       console.log(err);
-//       res.send("Error quering database");
-//     }
-//   });
-// });
-
-// async function fetchDataFromDatabase(conn) {
-//   try {
-//     const [rows] = await conn.query("SELECT * FROM monitor");
-//     return rows || [];
-//   } catch (error) {
-//     console.error("Error fetching data from the database:", error.message);
-//     throw error; // Re-throw the error to be caught in the calling code
-//   }
-// }
 
 app.post("/monthlyreport", async (req, res) => {
   try {
@@ -457,5 +361,3 @@ app.post("/monthlyreport", async (req, res) => {
 app.listen(4000, () => {
   console.log(`Connected 4000`);
 });
-
-
