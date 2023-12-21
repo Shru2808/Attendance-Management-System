@@ -28,11 +28,47 @@ app.get("/Adminregistration", (req, res) => {
 //   res.render("Emplogin");
 // });
 
+//Registration of new admin
+app.get("/adminsignup", (req, res) => {
+  const { Name, empid, email, pass, DOB, DOJ, Designation, Location } =
+    req.query;
+
+  // Check if empid already exists
+  const selectQuery = "SELECT * FROM admin WHERE empid = ?";
+  conn.query(selectQuery, [empid], (err, results) => {
+    if (err) {
+      console.log("Error checking empid:", err);
+      res.status(500).send("Internal Server Error");
+    } else {
+      if (results.length > 0) {
+        console.log("Empid already exists");
+        res.status(409).send("Empid already exists");
+      } else {
+        // If empid doesn't exist, insert the new record
+        const insertQuery = "INSERT INTO admin VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        conn.query(
+          insertQuery,
+          [Name, empid, email, pass, DOB, DOJ, Designation, Location],
+          (err, result) => {
+            if (err) {
+              console.log("Error inserting data:", err);
+              res.status(500).send("Internal Server Error");
+            } else {
+              console.log("Data inserted successfully");
+              res.send("Data inserted successfully");
+            }
+          }
+        );
+      }
+    }
+  });
+});
+
 //Login of the admin
 app.get("/alogin", async (req, res) => {
-  const { email, id, pass } = req.query;
-  const sql = "select * from admin where email = ? and  id = ? and pass = ?";
-  const values = [email, id, pass];
+  const { email, empid, pass } = req.query;
+  const sql = "select * from admin where email = ? and  empid = ? and pass = ?";
+  const values = [email, empid, pass];
   conn.query(sql, values, (err, results) => {
     if (err) {
       console.error("Error quering the database", +err.message);
@@ -132,40 +168,77 @@ app.post("/markatt", (req, res) => {
     }
   });
 });
+
 //Updating the values from the addnewemptable
 app.post("/updaterecord", (req, res) => {
   const empid = req.body.empid;
-  const selectQuery = "select * from addnewemp where empid = ?";
+
+  // Validate empid (you can add more validation as needed)
+  if (!empid || isNaN(empid)) {
+    return res.status(400).json({ error: "Invalid or missing empid" });
+  }
+
+  const selectQuery = "SELECT * FROM addnewemp WHERE empid = ?";
+
   conn.query(selectQuery, [empid], (selectErr, selectResults) => {
-    if (!selectErr) {
-      const selectedFields = Object.keys(req.body).filter((key) =>
-        key.startsWith("employeeInfo")
-      );
+    if (selectErr) {
+      console.error("Error querying database:", selectErr);
+      return res.status(500).json({ error: "Error querying database" });
+    }
 
-      let updateQuery = "UPDATE addnewemp SET ";
-      const updates = [];
+    if (selectResults.length === 0) {
+      return res.status(404).json({ error: "Record not found" });
+    }
+    //console.log(selectResults);
+    const selectedFields = Object.keys(req.body).filter((key) =>
+      key.startsWith("employeeInfo")
+    );
+    console.log(selectedFields);
+    if (selectedFields.length === 0) {
+      // No fields selected for update
+      return res.status(400).json({ error: "No fields selected for update" });
+    }
 
-      selectedFields.forEach((field, index) => {
-        updates.push(`${field.substring("employeeInfo_".length)} = ?`);
-      });
-      const values = selectedFields.map((field) => req.body[field]);
-      values.push(empid);
-      updateQuery += updates.join(", ");
-      updateQuery += " WHERE empid = ?";
-      // console.log(updateQuery);
+    // Use parameterized queries to prevent SQL injection
+    let updateQuery = "UPDATE addnewemp SET ";
+    const updates = selectedFields.map(
+      (field) => `${field.substring("employeeInfo_".length)} = ?`
+    );
+    const values = selectedFields.map((field) => req.body[field]);
+    values.push(empid);
+
+    updateQuery += updates.join(", ");
+    updateQuery += " WHERE empid = ?";
+
+    // Use a transaction if needed
+    conn.beginTransaction((beginTransactionErr) => {
+      if (beginTransactionErr) {
+        console.error("Error starting transaction:", beginTransactionErr);
+        return res.status(500).json({ error: "Error starting transaction" });
+      }
+
+      // Execute the update query
       conn.query(updateQuery, values, (updateErr, updateResults) => {
         if (updateErr) {
           console.error("Error updating records:", updateErr);
-          res.status(500).json({ error: "Error updating records" });
+          // Rollback the transaction in case of an error
+          conn.rollback(() => {
+            res.status(500).json({ error: "Error updating records" });
+          });
         } else {
-          console.log("Records updated successfully.");
-          res.render("adminside");
+          // Commit the transaction if the update is successful
+          conn.commit((commitErr) => {
+            if (commitErr) {
+              console.error("Error committing transaction:", commitErr);
+              res.status(500).json({ error: "Error committing transaction" });
+            } else {
+              console.log("Records updated successfully.");
+              res.render("adminside");
+            }
+          });
         }
       });
-    } else {
-      console.log(selectErr);
-      res.send("Error quering database");
-    }
+    });
   });
 });
 
@@ -283,80 +356,6 @@ app.post("/monthlyreport", async (req, res) => {
     res.status(500).send("Internal Server Error");
   }
 });
-//EMPLOYEE SIDE
-
-//Login of the user
-// app.get("/emp", (req, res) => {
-//   const empid = req.query.empid;
-//   const pass = req.query.pass;
-//   const sql = "select * from addnewemp where empid=? and pass=?";
-
-//   conn.query(sql, [empid, pass], (err, results) => {
-//     if (err) {
-//       console.error("Error quering the database", +err.message);
-//       res.send("Error quering the database");
-//     } else {
-//       if (results.length > 0) {
-//         let qry1 =
-//           "select remaining_sick_leaves, remaining_paid_leaves from paidleavestatus where empid=?";
-//         conn.query(qry1, [empid], (err, data) => {
-//           const empid = results[0].empid;
-//           if (!err) {
-//             if (data.length == 0) {
-//               res.render("Empdashboard", { empid });
-//             } else {
-//               res.render("Empdashboard", { leaves: data, empid: empid });
-//             }
-//           } else {
-//             console.log(err);
-//           }
-//         });
-//         //User authentication
-//       } else {
-//         res.send("Invalid id or passwrod"); //Autentication failed
-//       }
-//     }
-//   });
-// });
-
-//Mark attendance of an employee
-// app.post("/markattendance", async (req, res) => {
-//   const { empid, Attendance, Location, Date } = req.body;
-//   const qry = "insert into empattendance values (?,?,?,?)";
-//   conn.query(qry, [empid, Attendance, Location, Date], (err, results) => {
-//     if (!err) {
-//       res.render("Empdashboard");
-//     } else {
-//       console.log(err);
-//     }
-//   });
-// });
-
-// //Leave Application for employee side
-// app.post("/application", (req, res) => {
-//   const { empid, leavetype, noofdays, startdate, enddate } = req.body;
-//   const qry = "select * from leaveappl where empid=? and startdate";
-//   const values = [empid, leavetype, noofdays, startdate, enddate];
-
-//   conn.query(qry, [empid, startdate], (err, results) => {
-//     if (err) {
-//       console.log(err);
-//     } else {
-//       if (results.length > 0) {
-//         res.render("Empdashboard");
-//       } else {
-//         let qry1 = "insert into leaveappl values (?,?,?,?,?)";
-//         conn.query(qry1, values, (err, results) => {
-//           if (err) {
-//             console.log(err);
-//           } else {
-//             res.render("Empdashboard");
-//           }
-//         });
-//       }
-//     }
-//   });
-// });
 
 app.listen(4000, () => {
   console.log(`Connected 4000`);

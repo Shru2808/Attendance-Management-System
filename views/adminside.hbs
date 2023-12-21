@@ -181,54 +181,7 @@
                             </div>
                             <script src="/public/scripts/script.js"></script>
                         </div>
-                        {{!-- <div class="tab-pane fade" id="v-pills-leavereqs" role="tabpanel"
-                            aria-labelledby="v-pills-leavereqs-tab">
-                            <div class="container">
-                                <div class="card">
-                                    <div class="card-header text-uppercase Cheader">
-                                        LEAVE REQUESTS
-                                    </div>
-                                    <div class="card-body">
-                                        <table class="table table-striped table-dark">
-                                            <thead>
-                                                <tr>
-                                                    <th scope="col">EMPID</th>
-                                                    <th scope="col">ON LEAVE FOR</th>
-                                                    <th scope="col">START DATE</th>
-                                                    <th scope="col">END DATE</th>
-                                                    <th scope="col">Delete</th>
-                                                    <th scope="col">Accept</th>
 
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                {{#leaverequest}}
-                                                <tr>
-                                                    <td>{{empid}}</td>
-                                                    <td>{{noofdays}}</td>
-                                                    <td>{{startdate}}</td>
-                                                    <td>{{enddate}}</td>
-                                                    <td><a href="delete/{{this.empid}}"><i class="fa-1x fa fa-trash"
-                                                                aria-hidden="true"></i></a>
-                                                    </td>
-                                                    <td>
-                                                        <a href="accept/{{this.empid}}"><i class="fa-1x fa fa-check"
-                                                                aria-hidden="true"></i></a>
-
-                                                    </td>
-
-
-                                                </tr>
-                                                {{/leaverequest}}
-
-                                            </tbody>
-
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
-
-                        </div> --}}
 
 
                         {{!-- Download Reports tab --}}
@@ -242,27 +195,7 @@
                                     <div class="container">
                                         <div class="card">
                                             <div class="card-body">
-                                                {{!-- <table class="table table-striped table-dark">
-                                                    <thead>
-                                                        <tr>
-                                                            <th scope="col">EMPID</th>
-                                                            <th scope="col">Name</th>
-                                                            <th scope="col">Present Days</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        {{#attreport}}
-                                                        <tr>
 
-
-                                                            <td>{{empid}}</td>
-                                                            <td>{{Name}}</td>
-                                                            <td>{{total_present_days}}</td>
-
-                                                        </tr>
-                                                        {{/attreport}}
-                                                    </tbody>
-                                                </table> --}}
                                                 <form action="/monthlyreport" method="post">
                                                     <div class="form-group">
                                                         <label for="month">Enter Current Month</label>
@@ -329,6 +262,156 @@
 
                                 <button type="submit" class="btn bth-primary">Submit</button>
                             </form>
+
+                            <script>
+                                //document.addEventListener("DOMContentLoaded", function () {
+                                // Get references to the checkboxes and the container for input fields
+                                //   var checkboxes = document.querySelectorAll('input[type="checkbox"]');
+                                // var inputFieldsContainer = document.getElementById('inputFieldsContainer');
+
+                                // Function to toggle visibility of input fields based on checkbox status
+                                //function toggleInputFields() {
+                                //  inputFieldsContainer.innerHTML = ''; // Clear existing input fields
+
+                                //checkboxes.forEach(function (checkbox) {
+                                //  if (checkbox.checked) {
+                                // If checkbox is checked, create and append corresponding input field
+                                //    var inputField = document.createElement('input');
+                                //  inputField.setAttribute('type', 'text'); // You can adjust the type as needed
+                                // inputField.setAttribute('name', checkbox.value);
+                                //inputField.setAttribute('placeholder', 'Enter ' + checkbox.value);
+                                //inputFieldsContainer.appendChild(inputField);
+                                //}
+                                //});
+                                //}
+
+                                // Attach event listener to checkboxes to trigger the toggle function
+                                //checkboxes.forEach(function (checkbox) {
+                                //  checkbox.addEventListener('change', toggleInputFields);
+                                //});
+                                //}); 
+                                document.getElementById("updateForm").addEventListener("change", function () {
+                                    updateInputFields();
+                                });
+
+                                function updateInputFields() {
+                                    var checkboxes = document.querySelectorAll('input[type="checkbox"]');
+                                    var container = document.getElementById("inputFieldsContainer");
+
+                                    checkboxes.forEach(function (checkbox) {
+                                        var inputField = document.getElementById("employeeInfo_" + checkbox.value);
+
+                                        if (checkbox.checked) {
+                                            // If the checkbox is checked, show the associated input field
+                                            if (!inputField) {
+                                                // If the input field doesn't exist, create it
+                                                inputField = document.createElement("input");
+                                                inputField.type = "text";
+                                                inputField.className = "form-control";
+                                                inputField.id = "employeeInfo_" + checkbox.value;
+                                                inputField.name = "employeeInfo_" + checkbox.value;
+                                                inputField.placeholder = "Enter information for " + checkbox.value;
+                                                container.appendChild(inputField);
+                                            }
+                                            inputField.style.display = "block";
+                                        } else {
+                                            // If the checkbox is unchecked, hide and clear the associated input field
+                                            if (inputField) {
+                                                inputField.style.display = "none";
+                                                inputField.value = ""; // Clear the input field
+                                            }
+                                        }
+                                    });
+                                }
+
+                                document
+                                    .getElementById("updateForm")
+                                    .addEventListener("submit", function (event) {
+                                        event.preventDefault();
+
+                                        // Collect form data, including dynamically generated input fields
+                                        var formData = new FormData(this);
+
+                                        // Convert FormData to a plain object
+                                        var formObject = {};
+                                        formData.forEach(function (value, key) {
+                                            formObject[key] = value;
+                                        });
+
+                                        // Log or process the collected form data
+                                        console.log("Collected Form Data:", formObject);
+
+                                        // Send the form data to the server using fetch or XMLHttpRequest
+                                        fetch("/updaterecord", {
+                                            method: "POST",
+                                            headers: {
+                                                "Content-Type": "application/json",
+                                            },
+                                            body: JSON.stringify(formObject),
+                                        })
+                                            .then((response) => response.json())
+                                            .then((data) => {
+                                                console.log("Server response:", data);
+                                                // Optionally, handle the server response
+                                            })
+                                            .catch((error) => console.error("Error:", error));
+                                    });
+
+                                // Initial setup to create all potential input fields
+                                updateInputFields();
+
+                            </script>
+
+                            <style>
+                                #updateForm {
+                                    max-width: 400px;
+                                    /* Adjust the maximum width as needed */
+                                    margin: 0 auto;
+                                    /* Center the form */
+                                    padding: 20px;
+                                    background-color: #f8f9fa;
+                                    /* Light background color */
+                                    border-radius: 8px;
+                                    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+                                    /* Add a subtle box shadow */
+                                }
+
+                                label {
+                                    display: block;
+                                    margin-bottom: 8px;
+                                }
+
+                                .form-check {
+                                    margin-bottom: 10px;
+                                }
+
+                                #inputFieldsContainer {
+                                    margin-top: 15px;
+                                }
+
+                                input[type="text"] {
+                                    width: 100%;
+                                    padding: 8px;
+                                    margin-bottom: 10px;
+                                    box-sizing: border-box;
+                                }
+
+                                button {
+                                    background-color: #007bff;
+                                    /* Primary button color */
+                                    color: #fff;
+                                    /* Button text color */
+                                    padding: 10px 15px;
+                                    border: none;
+                                    border-radius: 5px;
+                                    cursor: pointer;
+                                }
+
+                                button:hover {
+                                    background-color: #0056b3;
+                                    /* Button color on hover */
+                                }
+                            </style>
                         </div>
 
                         <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
